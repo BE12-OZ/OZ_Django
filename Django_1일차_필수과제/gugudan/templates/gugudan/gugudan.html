@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>구구단</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        h1 {
+            margin-bottom: 30px;
+        }
+        .dan-links {
+            margin-bottom: 30px;
+        }
+        .dan-links a {
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>구구단</h1>
+    <div class="dan-links">
+        {% for i in "23456789" %}
+            <a href="/gugudan/{{ i }}/">{{ i }}단</a>
+        {% endfor %}
+    </div>
+    <table>
+        {% for dan in gugudan_list %}
+            <tr>
+                {% for result in dan %}
+                    <td>{{ result }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
