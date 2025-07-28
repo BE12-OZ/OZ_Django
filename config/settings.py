@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookmarks',
     'accounts',
+    'todos',
 ]
 
 LOGIN_REDIRECT_URL = '/bookmarks/'
