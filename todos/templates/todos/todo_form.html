@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% if form.instance.pk %}Edit Todo{% else %}Create Todo{% endif %}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+<a href="{% if form.instance.pk %}{% url 'todos:todo_detail' form.instance.pk %}{% else %}{% url 'todos:todo_list' %}{% endif %}">Cancel</a>
+{% endblock %}

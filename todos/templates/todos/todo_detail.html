@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ todo.title }}</h1>
+<p>{{ todo.description }}</p>
+<p>Completed: {{ todo.completed }}</p>
+<p>Created at: {{ todo.created_at|date:"Y-m-d H:i" }}</p>
+
+<a href="{% url 'todos:todo_update' todo.pk %}">Edit</a>
+<form action="{% url 'todos:todo_delete' todo.pk %}" method="post" style="display: inline;">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>
+
+<a href="{% url 'todos:todo_list' %}">Back to list</a>
+{% endblock %}
