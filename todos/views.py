@@ -1,39 +1,33 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from .models import Todo
-from .forms import TodoForm
 
-def todo_list(request):
-    todos = Todo.objects.all()
-    return render(request, 'todos/todo_list.html', {'todos': todos})
+class TodoListView(ListView):
+    model = Todo
+    template_name = 'todos/todo_list.html'
+    context_object_name = 'todos'
 
-def todo_create(request):
-    if request.method == 'POST':
-        form = TodoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('todos:todo_list')
-    else:
-        form = TodoForm()
-    return render(request, 'todos/todo_form.html', {'form': form})
+class TodoCreateView(CreateView):
+    model = Todo
+    fields = ['title', 'description', 'completed']
+    template_name = 'todos/todo_form.html'
+    success_url = reverse_lazy('todos:todo_list')
 
-def todo_detail(request, pk):
-    todo = get_object_or_404(Todo, pk=pk)
-    return render(request, 'todos/todo_detail.html', {'todo': todo})
+class TodoDetailView(DetailView):
+    model = Todo
+    template_name = 'todos/todo_detail.html'
+    context_object_name = 'todo'
 
-def todo_update(request, pk):
-    todo = get_object_or_404(Todo, pk=pk)
-    if request.method == 'POST':
-        form = TodoForm(request.POST, instance=todo)
-        if form.is_valid():
-            form.save()
-            return redirect('todos:todo_detail', pk=pk)
-    else:
-        form = TodoForm(instance=todo)
-    return render(request, 'todos/todo_form.html', {'form': form})
+class TodoUpdateView(UpdateView):
+    model = Todo
+    fields = ['title', 'description', 'completed']
+    template_name = 'todos/todo_form.html'
+    
+    def get_success_url(self):
+        return reverse_lazy('todos:todo_detail', kwargs={'pk': self.object.pk})
 
-def todo_delete(request, pk):
-    todo = get_object_or_404(Todo, pk=pk)
-    if request.method == 'POST':
-        todo.delete()
-        return redirect('todos:todo_list')
-    return render(request, 'todos/todo_confirm_delete.html', {'todo': todo})
+class TodoDeleteView(DeleteView):
+    model = Todo
+    template_name = 'todos/todo_confirm_delete.html'
+    success_url = reverse_lazy('todos:todo_list')
+    context_object_name = 'todo'
