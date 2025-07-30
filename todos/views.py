@@ -3,6 +3,8 @@ from django.views.generic import ListView, CreateView, DetailView, UpdateView, D
 from .models import Todo, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 class TodoListView(ListView):
     model = Todo
@@ -45,12 +47,33 @@ class TodoDeleteView(LoginRequiredMixin, DeleteView):
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     fields = ['content']
-    template_name = 'todos/comment_form.html'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         form.instance.todo_id = self.kwargs['pk']
-        return super().form_valid(form)
+        comment = form.save()
+        
+        html = render_to_string('todos/partials/comment.html', {'comment': comment})
+        return JsonResponse({'html': html})
+
+class CommentUpdateView(LoginRequiredMixin, UpdateView):
+    model = Comment
+    fields = ['content']
+    template_name = 'todos/comment_update_form.html'
+
+    def get_queryset(self):
+        return Comment.objects.filter(author=self.request.user)
 
     def get_success_url(self):
-        return reverse_lazy('todos:todo_detail', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('todos:todo_detail', kwargs={'pk': self.object.todo.pk})
+
+class CommentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Comment
+
+    def get_queryset(self):
+        return Comment.objects.filter(author=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return JsonResponse({'status': 'ok'})
