@@ -5,7 +5,9 @@ from .views import (
     TodoDetailView,
     TodoUpdateView,
     TodoDeleteView,
-    CommentCreateView
+    CommentCreateView,
+    CommentUpdateView,
+    CommentDeleteView
 )
 
 app_name = 'todos'
@@ -17,4 +19,6 @@ urlpatterns = [
     path('<int:pk>/update/', TodoUpdateView.as_view(), name='todo_update'),
     path('<int:pk>/delete/', TodoDeleteView.as_view(), name='todo_delete'),
     path('<int:pk>/comment/', CommentCreateView.as_view(), name='comment_create'),
+    path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment_update'),
+    path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment_delete'),
 ]

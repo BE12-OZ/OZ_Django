@@ -1,0 +1,11 @@
+<div class="list-group-item list-group-item-action flex-column align-items-start" id="comment-{{ comment.pk }}">
+    <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{ comment.author }}</h5>
+        <small>{{ comment.created_at|timesince }} ago</small>
+    </div>
+    <p class="mb-1">{{ comment.content }}</p>
+    {% if user == comment.author %}
+        <a href="{% url 'todos:comment_update' comment.pk %}" class="btn btn-sm btn-warning">Edit</a>
+        <button class="btn btn-sm btn-danger delete-comment-btn" data-comment-id="{{ comment.pk }}">Delete</button>
+    {% endif %}
+</div>
