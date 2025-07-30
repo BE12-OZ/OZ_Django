@@ -1,13 +1,41 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Todo List</h1>
-<a href="{% url 'todos:todo_create' %}">Create a new todo</a>
-<ul>
-    {% for todo in todos %}
-    <li>
-        <a href="{% url 'todos:todo_detail' todo.pk %}">{{ todo.title }}</a> - {{ todo.created_at|date:"Y-m-d" }}
-    </li>
-    {% endfor %}
-</ul>
+    <h1>Todo List</h1>
+    <a href="{% url 'todos:todo_create' %}" class="btn btn-primary mb-3">Create Todo</a>
+    <ul class="list-group">
+        {% for todo in todos %}
+            <li class="list-group-item">
+                <a href="{% url 'todos:todo_detail' todo.pk %}">{{ todo.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 {% endblock %}

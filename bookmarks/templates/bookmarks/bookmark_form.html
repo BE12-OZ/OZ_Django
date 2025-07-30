@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <h1>{% if object %}Edit Todo{% else %}Create Todo{% endif %}</h1>
+    <h1>Create Bookmark</h1>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}

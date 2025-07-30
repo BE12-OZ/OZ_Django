@@ -40,9 +40,14 @@ INSTALLED_APPS = [
     'bookmarks',
     'accounts',
     'todos',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
-LOGIN_REDIRECT_URL = '/bookmarks/'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/todos/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 MIDDLEWARE = [
