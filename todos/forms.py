@@ -1,7 +1,16 @@
 from django import forms
-from .models import Todo
+from .models import Todo, Comment
+from django_summernote.widgets import SummernoteWidget
 
 class TodoForm(forms.ModelForm):
     class Meta:
         model = Todo
-        fields = ['title', 'description', 'completed']
+        fields = ['title', 'content', 'image']
+        widgets = {
+            'content': SummernoteWidget(),
+        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']

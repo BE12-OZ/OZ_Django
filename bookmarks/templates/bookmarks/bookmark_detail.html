@@ -3,5 +3,5 @@
 {% block content %}
   <h2>{{ bookmark.name }}</h2>
   <p>URL: <a href="{{ bookmark.url }}" target="_blank">{{ bookmark.url }}</a></p>
-  <a href="{% url 'bookmark_list' %}">목록으로 돌아가기</a>
+  <a href="{% url 'bookmarks:bookmark_list' %}">목록으로 돌아가기</a>
 {% endblock %}

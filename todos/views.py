@@ -1,12 +1,13 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from .models import Todo, Comment
+from .forms import TodoForm, CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 
-class TodoListView(ListView):
+class TodoListView(LoginRequiredMixin, ListView):
     model = Todo
     template_name = 'todos/todo_list.html'
     context_object_name = 'todos'
@@ -17,7 +18,7 @@ class TodoListView(ListView):
 
 class TodoCreateView(LoginRequiredMixin, CreateView):
     model = Todo
-    fields = ['title', 'description', 'completed']
+    form_class = TodoForm
     template_name = 'todos/todo_form.html'
     success_url = reverse_lazy('todos:todo_list')
 
@@ -32,7 +33,7 @@ class TodoDetailView(DetailView):
 
 class TodoUpdateView(LoginRequiredMixin, UpdateView):
     model = Todo
-    fields = ['title', 'description', 'completed']
+    form_class = TodoForm
     template_name = 'todos/todo_form.html'
     
     def get_success_url(self):
@@ -46,7 +47,7 @@ class TodoDeleteView(LoginRequiredMixin, DeleteView):
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
-    fields = ['content']
+    form_class = CommentForm
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -58,7 +59,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
 class CommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
-    fields = ['content']
+    form_class = CommentForm
     template_name = 'todos/comment_update_form.html'
 
     def get_queryset(self):

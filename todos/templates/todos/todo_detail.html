@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     <div class="card">
@@ -6,7 +7,12 @@
             <h2>{{ todo.title }}</h2>
         </div>
         <div class="card-body">
-            <p class="card-text">{{ todo.description }}</p>
+            {% if todo.thumbnail %}
+                <img src="{{ todo.thumbnail.url }}" alt="{{ todo.title }}" class="img-fluid">
+            {% else %}
+                <img src="{% static 'images/no_image.jpeg' %}" alt="No Image" class="img-fluid">
+            {% endif %}
+            <p class="card-text">{{ todo.content|safe }}</p>
             <p><strong>Status:</strong> {% if todo.completed %}Completed{% else %}Not Completed{% endif %}</p>
             <p><strong>Author:</strong> {{ todo.author }}</p>
         </div>
