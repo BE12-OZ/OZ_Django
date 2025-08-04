@@ -1,5 +1,5 @@
 from django import forms
-from .models import Todo, Comment
+from .models import Todo
 from django_summernote.widgets import SummernoteWidget
 
 class TodoForm(forms.ModelForm):
@@ -9,8 +9,3 @@ class TodoForm(forms.ModelForm):
         widgets = {
             'content': SummernoteWidget(),
         }
-
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        fields = ['content']

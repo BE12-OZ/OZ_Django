@@ -5,7 +5,7 @@
     </div>
     <p class="mb-1">{{ comment.content }}</p>
     {% if user == comment.author %}
-        <a href="{% url 'todos:comment_update' comment.pk %}" class="btn btn-sm btn-warning">Edit</a>
+        <a href="{% url 'comments:comment_update' comment.pk %}" class="btn btn-sm btn-warning">Edit</a>
         <button class="btn btn-sm btn-danger delete-comment-btn" data-comment-id="{{ comment.pk }}">Delete</button>
     {% endif %}
 </div>

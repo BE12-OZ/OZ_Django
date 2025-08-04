@@ -3,5 +3,8 @@
 {% block content %}
   <h2>{{ bookmark.name }}</h2>
   <p>URL: <a href="{{ bookmark.url }}" target="_blank">{{ bookmark.url }}</a></p>
-  <a href="{% url 'bookmarks:bookmark_list' %}">목록으로 돌아가기</a>
+  
+  <a href="{% url 'bookmarks:bookmark_update' bookmark.pk %}" class="btn btn-warning">Edit</a>
+  <a href="{% url 'bookmarks:bookmark_delete' bookmark.pk %}" class="btn btn-danger">Delete</a>
+  <a href="{% url 'bookmarks:bookmark_list' %}" class="btn btn-secondary">Back to List</a>
 {% endblock %}

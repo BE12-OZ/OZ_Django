@@ -1,18 +1,23 @@
-from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Bookmark
 
-def bookmark_list(request):
-    bookmarks = Bookmark.objects.all()
-    context = {'bookmarks': bookmarks}
-    return render(request, 'bookmarks/bookmark_list.html', context)
+class BookmarkListView(LoginRequiredMixin, ListView):
+    model = Bookmark
+    template_name = 'bookmarks/bookmark_list.html'
+    context_object_name = 'bookmarks'
 
-def bookmark_detail(request, pk):
-    bookmark = get_object_or_404(Bookmark, pk=pk)
-    context = {'bookmark': bookmark}
-    return render(request, 'bookmarks/bookmark_detail.html', context)
+    def get_queryset(self):
+        return Bookmark.objects.filter(author=self.request.user)
+
+class BookmarkDetailView(LoginRequiredMixin, DetailView):
+    model = Bookmark
+    template_name = 'bookmarks/bookmark_detail.html'
+    context_object_name = 'bookmark'
+
+    def get_queryset(self):
+        return Bookmark.objects.filter(author=self.request.user)
 
 class BookmarkCreateView(LoginRequiredMixin, CreateView):
     model = Bookmark
@@ -23,3 +28,23 @@ class BookmarkCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+class BookmarkUpdateView(LoginRequiredMixin, UpdateView):
+    model = Bookmark
+    fields = ['name', 'url']
+    template_name = 'bookmarks/bookmark_form.html'
+
+    def get_queryset(self):
+        return Bookmark.objects.filter(author=self.request.user)
+
+    def get_success_url(self):
+        return reverse_lazy('bookmarks:bookmark_detail', kwargs={'pk': self.object.pk})
+
+class BookmarkDeleteView(LoginRequiredMixin, DeleteView):
+    model = Bookmark
+    template_name = 'bookmarks/bookmark_confirm_delete.html'
+    success_url = reverse_lazy('bookmarks:bookmark_list')
+    context_object_name = 'bookmark'
+
+    def get_queryset(self):
+        return Bookmark.objects.filter(author=self.request.user)
